@@ -9,7 +9,7 @@ using TinyJSON;
 
 public class SteamWorkshopUploader : MonoBehaviour
 {
-    public const int version = 6;
+    public const float version = 1.01f;
 
     public Text versionText;
     public Text statusText;
@@ -260,9 +260,9 @@ public class SteamWorkshopUploader : MonoBehaviour
             string filename = basePath + packName + ".workshop.json";
 
             var pack = new WorkshopModPack();
+            pack.contentfolder = modPackName.text;
             pack.Save(filename);
 
-            pack.contentfolder = modPackName.text;
             Directory.CreateDirectory(basePath + modPackName.text);
             
             RefreshPackList();
@@ -347,7 +347,7 @@ public class SteamWorkshopUploader : MonoBehaviour
     {
         if (ioFailure)
         {
-			statusText.text = "Error: I/O Failure! :(";
+			statusText.text = "Error: I/O Failure!";
             return;
 		}
 
@@ -355,10 +355,10 @@ public class SteamWorkshopUploader : MonoBehaviour
         {
             case EResult.k_EResultInsufficientPrivilege:
                 // you're banned!
-                statusText.text = "Error: Unfortunately, you're banned by the community from uploading to the workshop! Bummer. :(";
+                statusText.text = "Error: Unfortunately, you're banned by the community from uploading to the workshop!";
                 break;
             case EResult.k_EResultTimeout:
-                statusText.text = "Error: Timeout :S";
+                statusText.text = "Error: Timeout..";
                 break;
             case EResult.k_EResultNotLoggedOn:
                 statusText.text = "Error: You're not logged into Steam!";
@@ -400,14 +400,14 @@ This has the benefit of directing the author to the workshop page so that they c
     {
         if (ioFailure)
         {
-			statusText.text = "Error: I/O Failure! :(";
+			statusText.text = "Error: I / O Failure!";
             return;
 		}
 
         switch(callback.m_eResult)
         {
             case EResult.k_EResultOK:
-                statusText.text = "SUCCESS! Item submitted! :D :D :D";
+                statusText.text = "SUCCESS! Item submitted!";
                 currentHandle = UGCUpdateHandle_t.Invalid;
                 break;
         }
@@ -428,7 +428,7 @@ This has the benefit of directing the author to the workshop page so that they c
                 statusText.text = "Committing changes...";
                 break;
             case EItemUpdateStatus.k_EItemUpdateStatusInvalid:
-                statusText.text = "Item invalid ... dunno why! :(";
+                statusText.text = "Item invalid ... unknown reason..";
                 break;
             case EItemUpdateStatus.k_EItemUpdateStatusUploadingPreviewFile:
                 statusText.text = "Uploading preview image...";
