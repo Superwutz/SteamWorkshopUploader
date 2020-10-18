@@ -32,6 +32,7 @@ public class SteamWorkshopUploader : MonoBehaviour
     public InputField modPackTags;
     public Dropdown modPackVisibility;
 
+    private const int sosID = 1162750;
     private const string defaultFilename = "MyNewMod.workshop.json";
     private const string defaultFolderName = "MyNewMod";
     private const string relativeBasePath = "/../WorkshopContent/";
@@ -51,7 +52,7 @@ public class SteamWorkshopUploader : MonoBehaviour
 
     void Start()
     {
-        versionText.text = string.Format("Steam Workshop Uploader - Build {0} --- App ID: {1}", version, SteamManager.m_steamAppId);
+        versionText.text = string.Format("Steam Workshop Uploader - Build {0} --- App ID: {1} --- Tool ID: {2}", version, sosID, SteamManager.m_steamAppId);
 
         if(SteamManager.m_steamAppId == 0)
         {
@@ -179,7 +180,31 @@ public class SteamWorkshopUploader : MonoBehaviour
         modPackTags.text = string.Join(",", currentPack.tags.ToArray());
         modPackVisibility.value = currentPack.visibility;
     }
-    
+
+ /*   public void SteamResync()
+    {
+
+    }
+
+    public void SteamResyncPack(WorkshopModPack pack)
+    {
+        var filename = pack.filename;
+        var id = pack.publishedfileid;
+
+
+        UGCQueryHandle_t handle = SteamUGC.CreateQueryUGCDetailsRequest(id, )
+        modPackContents.text = JSON.Dump(currentPack, true);
+
+        RefreshPreview();
+
+        modPackTitle.text = pack.title;
+        modPackPreviewFilename.text = pack.previewfile;
+        modPackContentFolder.text = currentPack.contentfolder;
+        modPackDescription.text = currentPack.description;
+        modPackTags.text = string.Join(",", currentPack.tags.ToArray());
+        modPackVisibility.value = currentPack.visibility;
+    }
+    */
     public void SelectModPack(string filename)
     {
         if(currentPack != null)
@@ -299,7 +324,7 @@ public class SteamWorkshopUploader : MonoBehaviour
     {
         if (string.IsNullOrEmpty(currentPack.publishedfileid))
         {
-            SteamAPICall_t call = SteamUGC.CreateItem(new AppId_t(SteamManager.m_steamAppId), Steamworks.EWorkshopFileType.k_EWorkshopFileTypeCommunity);
+            SteamAPICall_t call = SteamUGC.CreateItem(new AppId_t(sosID), Steamworks.EWorkshopFileType.k_EWorkshopFileTypeCommunity);
             m_itemCreated.Set(call);
 
             statusText.text = "Creating new item...";
@@ -311,7 +336,7 @@ public class SteamWorkshopUploader : MonoBehaviour
         ulong ulongId = ulong.Parse(pack.publishedfileid);
         var id = new PublishedFileId_t(ulongId);
 
-        UGCUpdateHandle_t handle = SteamUGC.StartItemUpdate(new AppId_t(SteamManager.m_steamAppId), id);
+        UGCUpdateHandle_t handle = SteamUGC.StartItemUpdate(new AppId_t(sosID), id);
         //m_itemUpdated.Set(call);
         //OnItemUpdated(call, false);
 
